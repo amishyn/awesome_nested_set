@@ -20,12 +20,12 @@ module CollectiveIdea #:nodoc:
         #       "#{'–' * i.level} #{i.name}"
         #     }) %>
         #
-        def nested_set_options(class_or_item, mover = nil)
+        def nested_set_options(class_or_item, mover = nil,options = {})
           class_or_item = class_or_item.roots if class_or_item.is_a?(Class)
           items = Array(class_or_item)
           result = []
           items.each do |root|
-            result += root.self_and_descendants.map do |i|
+            result += root.send(options[:with_self] ? "self_and_descendants" : "descendants").map do |i|
               if mover.nil? || mover.new_record? || mover.move_possible?(i)
                 [yield(i), i.id]
               end
